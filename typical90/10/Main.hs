@@ -31,8 +31,7 @@ main = do
     lr <- replicateM q (map read . words <$> getLine) :: IO [[Int]]
     let qr = listArray @UArray ((0, 0), (q-1, 1)) $ concat lr
 
-    let ans = [[oar ! (qr ! (i, 1)) - oar ! ((qr ! (i, 0)) - 1),
-                tar ! (qr ! (i, 1)) - tar ! ((qr ! (i, 0)) - 1)] | i <- [0..q-1]]
+    let ans = [let [l, r] = [qr ! (i, 0), qr ! (i, 1)] in [oar ! r - oar ! (l - 1), tar ! r - tar ! (l - 1)] | i <- [0..q-1]]
 
     forM_ (chunksOf 1 ans) $ \row -> do
         putStrLn $ fn row
