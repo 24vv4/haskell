@@ -1,4 +1,5 @@
 import Control.Arrow
+import Debug.Trace
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Vector.Unboxed as VU
 import Data.Vector.Algorithms.Intro qualified as VAI
@@ -6,6 +7,7 @@ import Data.Vector.Algorithms.Intro qualified as VAI
 main :: IO ()
 main = do
     --(n, m) <- (\vec -> (vec VU.! 0, vec VU.! 1)) . VU.unfoldrN 2 readint <$> B.getLine
+    -- !_ = traceShow n ()
 
 readint = fmap (second B.tail) . B.readInt
 
