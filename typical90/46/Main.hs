@@ -15,11 +15,8 @@ main = do
     let la = VU.map ((,1 :: Int) . (`mod` 46)) an
     let lb = VU.map ((,1 :: Int) . (`mod` 46)) bn
     let lc = VU.map ((,1 :: Int) . (`mod` 46)) cn
-    let ma = M.fromListWith (+) $ VU.toList la
-    let mb = M.fromListWith (+) $ VU.toList lb
-    let mc = M.fromListWith (+) $ VU.toList lc
-    let a = M.toAscList ma
-    let b = M.toAscList mb
-    let c = M.toAscList mc
-    let ans = [aj * bj * cj | (ai, aj) <- a, (bi, bj) <- b, (ci, cj) <- c, (ai + bi + ci) `mod` 46 == 0]
+    let a = VU.accumulate (+) (VU.fromList $ take 46 $ repeat 0) la
+    let b = VU.accumulate (+) (VU.fromList $ take 46 $ repeat 0) lb
+    let c = VU.accumulate (+) (VU.fromList $ take 46 $ repeat 0) lc
+    let ans = [(a VU.! i) * (b VU.! j) * (c VU.! k) | i <- [0..45], j <- [0..45], k <- [0..45], (i + j + k) `mod` 46 == 0]
     print $ sum ans
