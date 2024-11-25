@@ -9,11 +9,8 @@ main :: IO ()
 main = do
     (n, k) <- (\vec -> (vec VU.! 0, vec VU.! 1)) . VU.unfoldrN 2 readint <$> B.getLine
     ab <- VU.replicateM n $ (\vec -> (vec VU.! 0, vec VU.! 1)) . VU.unfoldrN 2 readint <$> B.getLine
-    let mab = VU.map fn ab
-    let (a, b) = VU.unzip mab
-    let c = a VU.++ b
-    let sorted = VU.modify VAI.sort c
-    print $ VU.sum $ VU.drop (2*n-k) sorted
+    let sorted = VU.modify VAI.sort $ VU.concatMap vfn ab
+    print $ VU.sum $ VU.take k $ VU.reverse sorted
 
-fn :: (Int, Int) -> (Int, Int)
-fn (a, b) = (a-b, b)
+vfn :: (Int, Int) -> VU.Vector Int
+vfn (a, b) = VU.singleton (a-b) VU.++ VU.singleton b
