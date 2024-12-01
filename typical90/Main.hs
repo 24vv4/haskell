@@ -14,6 +14,18 @@ modpow x n =
     if (n .&. 1) == 1 then x * (modpow (x*x`mod`modulus) (shiftR n 1)) `mod` modulus
     else (modpow (x*x`mod`modulus) (shiftR n 1)) `mod` modulus
 
+primeFactor:: Int -> Int -> M.Map Int Int -> M.Map Int Int
+primeFactor 1 _ m = m
+primeFactor n 1000010 m = M.alter f n m
+primeFactor n x m =
+    if n `mod` x == 0 then primeFactor (n `div` x) x $ M.alter f x m
+    else primeFactor n (x+1) m
+
+-- TODO: remove
+f :: Maybe Int -> Maybe Int
+f Nothing = Just 1
+f (Just x) = Just (x+1)
+
 readint = fmap (second B.tail) . B.readInt
 main :: IO ()
 main = do
