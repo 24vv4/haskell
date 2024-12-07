@@ -31,25 +31,18 @@ f (Just x) = Just (x+1)
 readint = fmap (second B.tail) . B.readInteger
 main :: IO ()
 main = do
-    (l, r) <- (\vec -> (vec V.! 0, vec V.! 1)) . V.unfoldrN 2 readint <$> B.getLine
-    let ans = count l r
-    print $ ans `mod` (10^9 + 7)
+    n <- (\vec -> (vec V.! 0)) . V.unfoldrN 1 readint <$> B.getLine
+    s <- B.getLine
+    print $ comb n - count s
 
-count :: Integer -> Integer -> Integer
-count l r =
-    let f x = until (> x) (*10) (1::Integer)
-        nx = f l
-        d = nd l
-    in if nx > r then d * (sumd l r)
-    else d * (sumd l (nx-1)) + count nx r
-
-nd :: Integer -> Integer
-nd = nd' 1
+count :: B.ByteString -> Integer
+count s = count' s 1 1
     where
-        nd' :: Integer -> Integer -> Integer
-        nd' x start =
-            if x < start * 10 then 1
-            else 1 + (nd' x (start * 10))
+        count' :: B.ByteString -> Int -> Integer -> Integer
+        count' s now con =
+            if now == B.length s then comb con
+            else if B.index s (now-1) == B.index s now then count' s (now+1) (con+1)
+            else comb con + (count' s (now+1) 1)
 
-sumd :: Integer -> Integer -> Integer
-sumd l r = (l + r) * (r - l + 1) `div` 2
+comb :: Integer -> Integer
+comb con = con * (con-1) `div` 2
