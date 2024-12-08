@@ -2,6 +2,7 @@ import Control.Arrow
 import Debug.Trace
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Vector.Unboxed as VU
+import qualified Data.Vector as V
 import Data.Vector.Algorithms.Intro qualified as VAI
 import qualified Data.Map.Strict as M
 import Data.Bits
